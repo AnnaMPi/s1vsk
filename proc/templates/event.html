@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block body %}
+<div class="event-detail">
+    <div class="event-poster-container">
+        <img src="{{ event.poster }}" alt="{{ event.title }}" class="event-poster">
+    </div>
+    <div class="event-info">
+        <h2>{{ event.title }}</h2>
+        <p class="event-description">{{ event.description }}</p>
+        
+        <h3>Laiks:</h3>
+        <p class="event-time">{{ event.time }}</p>
+    </div>
+</div>
+{% endblock %}
