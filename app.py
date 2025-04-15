@@ -10,6 +10,11 @@ def index():
     events = datub.get_events()
     return render_template('index.html', events=events)
 
+@app.route('/events')
+def all_events():
+    events = datub.get_events()
+    return render_template('events.html', events=events)
+
 @app.route('/event/<int:event_id>')
 def event_detail(event_id):
     events = datub.get_events()
@@ -17,7 +22,6 @@ def event_detail(event_id):
     if not event:
         return "Tāda pasakuma nav", 404
     return render_template('event.html', event=event)
-
     
 @app.route('/booking/success')
 def booking_success():
