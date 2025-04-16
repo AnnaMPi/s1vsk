@@ -26,7 +26,29 @@ def event_detail(event_id):
 @app.route('/booking/success')
 def booking_success():
     return "👌"
-
+    
+@app.route('/login', methods=["GET", "POST"])
+def forma():
+    if request.method == "POST":
+        vards = request.form.get('name')
+        uzvards = request.form.get('uzvards')
+        parole = request.form.get('parole')
+        print(vards, uzvards, parole)
+        return render_template("login.html", iesniegts = True)
+    else:
+        return render_template("login.html", iesniegts = False)  
+    
+@app.route('/registr', methods=["GET", "POST"])
+def forma1():
+    if request.method == "POST":
+        vards1 = request.form.get('name1')
+        uzvards1 = request.form.get('uzvards1')
+        klase1 = request.form.get('klase1')
+        parole1 = request.form.get('parole1')
+        print(vards1, uzvards1, klase1, parole1)
+        return render_template("registr.html", iesniegts = True)
+    else:
+        return render_template("registr.html", iesniegts = False)  
 
 
 if __name__ == '__main__':
