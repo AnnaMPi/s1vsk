@@ -1,0 +1,18 @@
+
+{% extends "layout.html" %}
+
+{% block title %}<title>Calendar — {{ menesis }}/{{ gads }}</title>{% endblock %}
+
+{% block body %}
+         
+<h1>Kalendārs: {{ menesis }}/{{ gads }}</h1>
+
+<div>
+    <a href="{{ url_for('ieprieksejais_menesis') }}">⬅ Iepriekšējais mēnesis</a>
+    |
+    <a href="{{ url_for('nakamais_menesis') }}">Nākamais mēnesis ➡</a>
+</div>
+
+<pre style="font-size: 18px;">{{ kal }}</pre>
+
+{% endblock %}
