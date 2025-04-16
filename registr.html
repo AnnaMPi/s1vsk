@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}reģistrēties{% endblock %}
+{% block body %}
+<form action="/registr", method="get">
+    <label>Ievadi vārdu: </label>
+    <input type="text" placeholder="Name"  name="name1">
+    <label>Ievadi uzvārdu: </label>
+    <input type="text" placeholder="Uzvārds" name="uzvards1">
+    <label>Ievadi klasi: </label>
+    <input type="text" placeholder="Klase" name="klase1">
+    <label>Ievadi paroli: </label>
+    <input type="text" placeholder="Parole" name="parole1">
+    <button type="submit">Iesniegts</button>
+</form>
+{% endblock %}
