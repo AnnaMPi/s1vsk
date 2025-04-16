@@ -80,3 +80,52 @@ nav a {
     text-decoration: none;
     display: inline-block;
 }
+
+img {
+    width: 50%;
+}
+
+.box{
+    width: 300px;
+    display: flex;
+    margin: 100px auto;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ffffff;
+    border-radius: 8px;
+    background-color: #769E79;
+}
+
+h1 {
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    padding: 20px;
+}
+
+label {
+    color: #ffffff;
+    text-shadow: 1px 1px #333;
+    font-size: 20px;
+}
+
+input {
+    border: 1px solid #769E79;
+    border-radius: 8px;
+    height: 40px;
+}
+
+input {
+    border: 1px solid #769E79;
+    border-radius: 8px;
+    height: 40px;
+}
+
+button{
+    border: 1px solid #769E79;
+    border-radius: 8px;
+}
