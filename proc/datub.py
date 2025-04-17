@@ -47,10 +47,23 @@ def create_datubazi():
                    class TEXT)''')
     conn.commit()
 
-    cursor.execute('''INSERT INTO students VALUES(1, "Oleg", "Ozols", "oleg11", "10.C") ''')
+def register_user(vards, uzvards, parole, klase):
+    conn = sqlite3.connect('datubazes.db')
+    c = conn.cursor()
+    c.execute('INSERT INTO students (name, surname, password, class) VALUES (?, ?, ?, ?)', (vards, uzvards, parole, klase))
     conn.commit()
-
+    students_id = c.lastrowid  # Get the auto-generated id
     conn.close()
+    return students_id
+    
+def get_user(name, surname, password):
+    conn = sqlite3.connect('datubazes.db')  # Use the correct database file
+    cursor = conn.cursor()
+    query = "SELECT * FROM students WHERE name = ? AND surname = ? AND password = ?"
+    cursor.execute(query, (name, surname, password))
+    students = cursor.fetchone()
+    conn.close()
+    return students  # Returns None if no user is found
 
 def get_events():
     conn = sqlite3.connect("datubazes.db")
