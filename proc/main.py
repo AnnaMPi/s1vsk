@@ -87,22 +87,27 @@ def forma():
         vards = request.form.get('name')
         uzvards = request.form.get('uzvards')
         parole = request.form.get('parole')
-        print(vards, uzvards, parole)
-        return render_template("login.html", iesniegts = True)
-    else:
-        return render_template("login.html", iesniegts = False)  
+        students = datub.get_user(vards, uzvards, parole)
+        if students:
+            return redirect(url_for('index'))
+        else:
+            return render_template("login.html", error = "Nepareiz vārds vai uzvārds")
+    return render_template("login.html")
+
     
 @app.route('/registr', methods=["GET", "POST"])
 def forma1():
     if request.method == "POST":
-        vards1 = request.form.get('name1')
-        uzvards1 = request.form.get('uzvards1')
-        klase1 = request.form.get('klase1')
-        parole1 = request.form.get('parole1')
-        print(vards1, uzvards1, klase1, parole1)
-        return render_template("registr.html", iesniegts = True)
-    else:
-        return render_template("registr.html", iesniegts = False)  
+        vards = request.form.get('name')
+        uzvards = request.form.get('uzvards')
+        klase = request.form.get('klase')
+        parole = request.form.get('parole')
+        students_id = datub.register_user(vards, uzvards, parole, klase)
+        if students_id:
+            return redirect(url_for('index'))
+        else:
+            return render_template("registr.html", iesniegts=True, students_id=students_id)
+    return render_template("registr.html", iesniegts=False) 
 
 
 if __name__ == '__main__':
