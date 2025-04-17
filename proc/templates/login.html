@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
-{% block title %}pieslēgties{% endblock %}
+{% block title %}Pieslēgties{% endblock %}
 {% block body %}
+{% if error: %}
+    <h2> {{ error }}</h2>
+{% endif %}
 <form action="/login", method="post">
     <div class="box">
         <label>Ievadi vārdu: </label>
