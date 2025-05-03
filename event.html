@@ -2,7 +2,7 @@
 
 {% block title %}{{ event.title }}{% endblock %}
 
-{% block content %}
+{% block body %}
 <div class="event-detail">
     <div class="event-poster-container">
         <img src="{{ event.poster }}" alt="{{ event.title }}" class="event-poster">
@@ -11,7 +11,7 @@
         <h2>{{ event.title }}</h2>
         <p class="event-description">{{ event.description }}</p>
         
-        <h3>Время:</h3>
+        <h3>Laiks:</h3>
         <p class="event-time">{{ event.time }}</p>
     </div>
 </div>

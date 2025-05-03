@@ -1,15 +1,21 @@
 {% extends "layout.html" %}
 
-{% block title %}Все мероприятия{% endblock %}
+{% block title %}Visi pasākumi{% endblock %}
 
-{% block content %}
-<h2>Все мероприятия</h2>
+{% block body %}
+<h2>Visi pasākumi</h2>
 <div class="event-grid">
     {% for event in events %}
     <div class="event-card">
         <img src="{{ event.poster }}" alt="{{ event.title }}">
         <h3>{{ event.title }}</h3>
-        <a href="{{ url_for('event_detail', event_id=event.id) }}">Подробнее</a>
+        <a href="{{ url_for('event_detail', event_id=event.id) }}">Sīkāk info</a>
+        {% if role == "Admin" %}
+            <a href="/user_list">Paskatīt dalībniekus</a>
+        {% endif %}
+        {% if role == "Student" %}
+            <a href="/zapis">Pierakstīties</a>
+        {% endif %}
     </div>
     {% endfor %}
 </div>

@@ -2,10 +2,30 @@
 {% block title %}Sākumlapa{% endblock %}
 
 {% block body %}
-<img src="/static/images.jpeg" alt="Logo">
-<h1>Salaspils 1.vidusskola</h1>
-<div class="text-end">
-    <button type="button" class="btn btn-outline-light me-2">Login</button>
-    <button type="button" class="btn btn-warning">Sign-up</button>
+<h2>Tuvākie pasākumi</h2>
+<div class="sveiki"></div>
+    {% if user %}
+ </div>       <p>Sveiki, {{ user }}, prieks redzēt jūs!</p>
+    {% else %}
+        <p>Laipni lūgti mājaslapā!</p>
+    {% endif %}
+</div>
+{% if error %}
+    <h2>{{ error }}</h2>
+{% endif %}
+<div class="event-grid">
+    {% for event in events[::] %}
+    <div class="event-card">
+        <img src="{{ event.poster }}" alt="{{ event.title }}">
+        <h3>{{ event.title }}</h3>
+        <a href="{{ url_for('event_detail', event_id=event.id) }}">Sīkāk info</a>
+        {% if role == "Admin" %}
+            <a href="/user_list">Paskatīt dalībniekus</a>
+        {% endif %}
+        {% if role == "Student" %}
+            <a href="/zapis">Pierakstīties</a>
+        {% endif %}
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

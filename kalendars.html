@@ -1,0 +1,59 @@
+
+{% extends "layout.html" %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block body %}
+<div class="calendar-container">
+    <h1>{{ month_name }} {{ gads }}</h1>
+
+    <div class="calendar-nav">
+        <a href="{{ url_for('ieprieksejais_menesis') }}">⬅ Iepriekšējais mēnesis</a>
+        |
+        <a href="{{ url_for('nakamais_menesis') }}">Nākamais mēnesis ➡</a>
+    </div>
+
+    <table class="calendar-table">
+        <thead>
+            <tr>
+                <th>P</th>
+                <th>O</th>
+                <th>T</th>
+                <th>C</th>
+                <th>P</th>
+                <th>S</th>
+                <th>Sv</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in cal %}
+            <tr>
+                {% for day in week %}
+                <td>
+                    {% if day != 0 %}
+                        {% if day in month_events %}
+                            {% if month_events[day]|length > 1 %}
+                                <a href="{{ url_for('day_events', gads=gads, menesis=menesis, day=day) }}" 
+                                   class="event-day"
+                                   title="{% for event in month_events[day] %}{{ event.title }}{% if not loop.last %}, {% endif %}{% endfor %}">
+                                    {{ day }} &#128170;
+                                </a>
+                            {% else %}
+                                <a href="{{ url_for('event_detail', event_id=month_events[day][0].id) }}" 
+                                   class="event-day"
+                                   title="{{ month_events[day][0].title }}">
+                                    {{ day }} &#128169;
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            {{ day }}
+                        {% endif %}
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
