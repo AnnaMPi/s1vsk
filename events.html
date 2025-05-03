@@ -9,12 +9,12 @@
     <div class="event-card">
         <img src="{{ event.poster }}" alt="{{ event.title }}">
         <h3>{{ event.title }}</h3>
-        <a href="{{ url_for('event_detail', event_id=event.id) }}">Sīkāk info</a>
+        <button onclick="location.href='{{ url_for('event_detail', event_id=event.id) }}'">Sīkāk info</button>
         {% if role == "Admin" %}
-            <a href="/user_list">Paskatīt dalībniekus</a>
+            <button onclick="location.href='/user_list'">Paskatīt dalībniekus</button>
         {% endif %}
         {% if role == "Student" %}
-            <a href="/zapis">Pierakstīties</a>
+            <button onclick="location.href='/zapis'">Pierakstīties</button>
         {% endif %}
     </div>
     {% endfor %}
