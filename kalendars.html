@@ -8,9 +8,8 @@
     <h1>{{ month_name }} {{ gads }}</h1>
 
     <div class="calendar-nav">
-        <a href="{{ url_for('ieprieksejais_menesis') }}">⬅ Iepriekšējais mēnesis</a>
-        |
-        <a href="{{ url_for('nakamais_menesis') }}">Nākamais mēnesis ➡</a>
+        <button onclick="location.href='{{ url_for('ieprieksejais_menesis') }}'">⬅ Iepriekšējais mēnesis</button>
+        <button onclick="location.href='{{ url_for('nakamais_menesis') }}'">Nākamais mēnesis ➡</button>
     </div>
 
     <table class="calendar-table">
