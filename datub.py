@@ -104,12 +104,74 @@ def get_events_by_date(date_str):
         events_dict.append(m)
     return events_dict
 
-def apply_for_event(user_id, event_id):
-    conn = sqlite3.connect('database.db')
+ef apply_for_event(user_name, event_id):
+    conn = sqlite3.connect('datubazes.db')
     cursor = conn.cursor()
-    cursor.execute(""" INSERT INTO pieteikties (user_id, event_id) VALUES (?, ?) """, (user_id, event_id))
+    
+    # First get the user's ID
+    cursor.execute('SELECT id FROM users WHERE name = ?', (user_name,))
+    user = cursor.fetchone()
+    
+    if not user:
+        conn.close()
+        return False
+    
+    user_id = user[0]
+    
+    # Check if already registered
+    cursor.execute('SELECT * FROM pieteikties WHERE user_id = ? AND event_id = ?', (user_id, event_id))
+    if cursor.fetchone():
+        conn.close()
+        return False
+    
+    # Register for event
+    cursor.execute('INSERT INTO pieteikties (user_id, event_id) VALUES (?, ?)', (user_id, event_id))
     conn.commit()
     conn.close()
+    return True
+
+def get_event_participants(event_id=None):
+    conn = sqlite3.connect('datubazes.db')
+    cursor = conn.cursor()
+    
+    if event_id:
+        # Get participants for a specific event
+        cursor.execute('''
+            SELECT users.name, users.surname, users.class 
+            FROM pieteikties 
+            JOIN users ON pieteikties.user_id = users.id 
+            WHERE pieteikties.event_id = ?
+        ''', (event_id,))
+    else:
+        # Get all participants for all events
+        cursor.execute('''
+            SELECT users.name, users.surname, users.class, events.title 
+            FROM pieteikties 
+            JOIN users ON pieteikties.user_id = users.id 
+            JOIN events ON pieteikties.event_id = events.id
+        ''')
+    
+    participants = cursor.fetchall()
+    conn.close()
+    
+    # Convert to list of dictionaries
+    participants_list = []
+    for participant in participants:
+        if event_id:
+            participants_list.append({
+                'name': participant[0],
+                'surname': participant[1],
+                'class': participant[2]
+            })
+        else:
+            participants_list.append({
+                'name': participant[0],
+                'surname': participant[1],
+                'class': participant[2],
+                'event': participant[3]
+            })
+    
+    return participants_list
 
 if __name__ == "__main__":
     create_datubazi()
