@@ -5,9 +5,12 @@
 <h2>Tuvākie pasākumi</h2>
 <div class="sveiki"></div>
     {% if user %}
- </div>       <p>Sveiki, {{ user }}, prieks redzēt jūs!</p>
+        <p >Sveiki, {{ user }}, prieks redzēt jūs!</p>
     {% else %}
         <p>Laipni lūgti mājaslapā!</p>
+    {% endif %}
+    {% if role %}
+        <p >Jūsu loma: {{ role }}</p>
     {% endif %}
 </div>
 {% if error %}
@@ -23,7 +26,9 @@
             <button onclick="location.href='/user_list'">Paskatīt dalībniekus</button>
         {% endif %}
         {% if role == "Student" %}
-            <button onclick="pieteikties()">Pierakstīties</button>
+            <form action="{{ url_for('pieteikties', event_id=event.id) }}" method="post">
+                <button type="submit">Pierakstīties</button>
+            </form>
         {% endif %}
     </div>
     {% endfor %}
