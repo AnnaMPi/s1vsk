@@ -3,18 +3,37 @@
 
 {% block body %}
 <h2>Tuvākie pasākumi</h2>
-<div class="sveiki">
-    {% if user %}
-        <p >Sveiki, {{ user }}, prieks redzēt jūs!</p>
-    {% else %}
-        <p>Laipni lūgti mājaslapā!</p>
-    {% endif %}
-    {% if role %}
-        <p >Jūsu loma: {{ role }}</p>
-    {% endif %}
+<div class="ceram">
+    <div class="sveiki">
+        {% if user %}
+            <p>Sveiki, {{ user }}, prieks redzēt jūs!</p>
+        {% else %}
+            <p>Laipni lūgti mājaslapā!</p>
+        {% endif %}
+        {% if role %}
+            <p>Jūsu loma: {{ role }}</p>
+        {% endif %}
+    </div>
+    <div class="pasakumi">
+        {% if events %}
+            <h3>Pasākumi, kuros esat pieteicies:</h3>
+            <ul class="applied-events">
+                {% set has_applied = false %} <!-- Izveidojam mainīgo kuru padaram par False, lai varētu izdrukāt ja cilvēks nav pieteicies pasākumiem --> 
+                {% for event in events %}
+                    {% if event.id in applied_events %}
+                        <li>{{ event.title }}</li>
+                        {% set has_applied = true %}
+                    {% endif %}
+                {% endfor %}
+                {% if not has_applied %}
+                    <p>Jūs neesat pieteicies nevienam pasākumam.</p>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
 </div>
 {% if error %}
-    <h2>{{ error }}</h2>
+    <h3>{{ error }}</h3>
 {% endif %}
 <div class="event-grid">
     {% for event in events[:2] %}
@@ -27,10 +46,11 @@
         {% endif %}
         {% if role == "Student" %}
             <form action="{{ url_for('pieteikties', event_id=event.id) }}" method="post">
-                <button type="submit">Pierakstīties</button>
+                <button type="submit" {% if event.id in applied_events %} disabled {% endif %}>Pierakstīties</button>
             </form>
         {% endif %}
     </div>
     {% endfor %}
 </div>
 {% endblock %}
+
