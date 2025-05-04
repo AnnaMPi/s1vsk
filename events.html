@@ -11,10 +11,14 @@
         <h3>{{ event.title }}</h3>
         <button onclick="location.href='{{ url_for('event_detail', event_id=event.id) }}'">Sīkāk info</button>
         {% if role == "Admin" %}
-            <button onclick="location.href='/user_list'">Paskatīt dalībniekus</button>
+            <button onclick="location.href='{{ url_for('user_list', event_id=event.id) }}'">
+                Paskatīt dalībniekus
+            </button>
         {% endif %}
         {% if role == "Student" %}
-            <button onclick="location.href='/zapis'">Pierakstīties</button>
+            <form action="{{ url_for('pieteikties', event_id=event.id) }}" method="post">
+                <button type="submit">Pierakstīties</button>
+            </form>
         {% endif %}
     </div>
     {% endfor %}
