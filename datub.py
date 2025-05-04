@@ -6,6 +6,8 @@ def drop_datubazi():
     conn.commit()
     cursor.execute('''DROP TABLE IF EXISTS users''')
     conn.commit()
+    cursor.execute('''DROP TABLE IF EXISTS pieteikties''')
+    conn.commit()
     conn.close()
 
 def create_datubazi():
@@ -26,24 +28,6 @@ def create_datubazi():
             FOREIGN KEY (user_id) REFERENCES users(id),
             FOREIGN KEY (event_id) REFERENCES events(id))''')    
 
-    cursor.execute('''INSERT INTO events VALUES(1, "1.aprīls", "16:00, 1.04.2025", 'https://www.ozolniekuvsk.lv/wp-content/uploads/2022/03/aprilis.png', 'descrition')''')
-    conn.commit()
-    cursor.execute('''INSERT INTO events VALUES(2, "Eko diena", "14:00, 27.05.2025",'https://kekava.lv/wp-content/uploads/2023/04/Majaslapas-titulslaids18.png', 'descroriptoion')''')
-    conn.commit()
-    
-    cursor.execute('''INSERT INTO events VALUES(3, "Žetona vakars", "17:00, 25.02.2025",'https://irv.lv/wp-content/uploads/2023/02/Afisa-1_zetoni.jpg', 'descroriptoion')''')
-    conn.commit()
-    
-    # cursor.execute('''INSERT INTO events VALUES(4, "Eko diena", "14:00, 27.05.2025",'https://kekava.lv/wp-content/uploads/2023/04/Majaslapas-titulslaids18.png', 'descroriptoion')''')
-    # conn.commit()
-    
-    # cursor.execute('''INSERT INTO events VALUES(5, "Eko diena", "14:00, 27.05.2025",'https://kekava.lv/wp-content/uploads/2023/04/Majaslapas-titulslaids18.png', 'descroriptoion')''')
-    # conn.commit()
-
-    
-    # cursor.execute('''INSERT INTO events VALUES(3, "Krepkij Ore6ek", '["10:00", "12:00", "16:00", "20:00"]','https://via.placeholder.com/200x300?text=Крепкий+орешек', 'Фильм про орешек')''')
-    # conn.commit()
-
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
                    id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -52,56 +36,59 @@ def create_datubazi():
                    password TEXT,
                    class TEXT,
                    role TEXT)''')
+                   
+    cursor.execute('''INSERT INTO events VALUES(1, "1.aprīls", "16:00, 1.04.2025", 'https://www.ozolniekuvsk.lv/wp-content/uploads/2022/03/aprilis.png', 'description')''')
     conn.commit()
-    conn.close()
+    cursor.execute('''INSERT INTO events VALUES(2, "Eko diena", "14:00, 27.05.2025",'https://kekava.lv/wp-content/uploads/2023/04/Majaslapas-titulslaids18.png', 'descroriptoion')''')
+    conn.commit()
+    
+    cursor.execute('''INSERT INTO events VALUES(3, "Žetona vakars", "17:00, 25.02.2025",'https://irv.lv/wp-content/uploads/2023/02/Afisa-1_zetoni.jpg', 'descroriptoion')''')
+    conn.commit()
+
+
 
 def register_user(vards, uzvards, parole, klase, role):
-    print("Reģistrācija")
     conn = sqlite3.connect('datubazes.db')
     c = conn.cursor()
-    c.execute('INSERT INTO users (name, surname, password, class, role) VALUES (?, ?, ?, ?, ?)', (vards, uzvards, parole, klase, role))
+    c.execute('INSERT INTO users (name, surname, password, class, role) VALUES (?, ?, ?, ?, ?)', (vards, uzvards, parole, klase, role)) # ievietojam mainīgos datus datubāzē
     conn.commit()
-    users_id = c.lastrowid  # Get the auto-generated id
+    users_id = c.lastrowid # iegūstam pēdējās ievietotās rindas ID
     conn.close()
-    print("Reģistrācija beidzās")
     return users_id
     
 def get_user(name, surname, password):
-    print("Логин")
-    conn = sqlite3.connect('datubazes.db')  # Use the correct database file
+    conn = sqlite3.connect('datubazes.db')
     cursor = conn.cursor()
-    query = "SELECT * FROM users WHERE name = ? AND surname = ? AND password = ?"
-    cursor.execute(query, (name, surname, password))
-    users = cursor.fetchone()
+    query = "SELECT * FROM users WHERE name = ? AND surname = ? AND password = ?" #no tabulas users dabujam datus, kur vārds, uzvārds un parole ir vienādi ar ievadītajiem datiem
+    cursor.execute(query, (name, surname, password))# iegūstam datus no datubāzes
+    users = cursor.fetchone()#fetchone metode paņem vienu rindu no datubāzes konkrētam vaicājumam, ja nav vairs rindu, tad atgriež None
     conn.close()
-    print(users)
-    return users  # Returns None if no user is found
+    return users 
 
 def get_events():
     conn = sqlite3.connect("datubazes.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT * FROM events''')
-    events = cursor.fetchall()
+    events = cursor.fetchall()# paņem visus datus no tabulas events
     conn.close()
 
     events_dict = []
-    for event in events:
-        m = {
-        'id': event[0],
+    for event in events:#iziet visiem elementiem kas ir zem events
+        m = {#izveidojam jaunu mainīgo m, kurā ir iekļauti visi elementi
+        'id': event[0],#iedodam nosaukumu un indexu
         'title': event[1],
         'description': event[4],
         'poster': event[3],
         'time': event[2]
+        }
 
-    }
         events_dict.append(m)
-    print(events_dict)
     return events_dict
 
 def get_events_by_date(date_str):
     conn = sqlite3.connect("datubazes.db")
     cursor = conn.cursor()
-    cursor.execute('''SELECT * FROM events WHERE time LIKE ?''', (f'%{date_str}%',))
+    cursor.execute('''SELECT * FROM events WHERE time LIKE ?''', (f'%{date_str}%',))# meklējam visus pasākumus, kas notiek konkrētā datumā
     events = cursor.fetchall()
     conn.close()
 
