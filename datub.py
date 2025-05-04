@@ -104,7 +104,7 @@ def get_events_by_date(date_str):
         events_dict.append(m)
     return events_dict
 
-ef apply_for_event(user_name, event_id):
+def apply_for_event(user_name, event_id):
     conn = sqlite3.connect('datubazes.db')
     cursor = conn.cursor()
     
