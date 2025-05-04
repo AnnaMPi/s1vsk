@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import datub # datub.py ir fails kurā ir izveidota datubaze un funkcijas, lai ierakstītu datus
 import calendar
 from datetime import datetime
@@ -10,15 +10,23 @@ app.secret_key = 'supermamaboboclat'#lai varētu izmantot sesijas un varētu sag
 
 @app.route('/')
 def index():
-    events = datub.get_events()# iegūst visus pasākumus no datubāzes
-    role = session.get('role')#sesija ir Flaskā, kas ļauj saglabāt datus starp lapām, ļauj uzturēt cilvēka reģistrētos datus
-    user = session.get('user')#session.get('user') uztur lietotāja informāciju, ar ko ir reģistrējies
-    return render_template('index.html', events=events, role=role, user=user)
+    events = datub.get_events()  # iegūst visus pasākumus no datubāzes
+    role = session.get('role')  # sesija ir Flaskā, kas ļauj saglabāt datus starp lapām, ļauj uzturēt cilvēka reģistrētos datus
+    user = session.get('user')  # session.get('user') uztur lietotāja informāciju, ar ko ir reģistrējies
+    applied_events = []
+    if user and role == "Student":
+        applied_events = datub.get_user_applied_events(user)  # ja ir reģistrējies kā students, tad iegūst visus pasākumus, kuros ir pieteicies
+    return render_template('index.html', events=events, role=role, user=user, applied_events=applied_events)
 
 @app.route('/events')
 def all_events():
+    role = session.get('role')  # sesija ir Flaskā, kas ļauj saglabāt datus starp lapām, ļauj uzturēt cilvēka reģistrētos datus
+    user = session.get('user')
     events = datub.get_events()
-    return render_template('events.html', events=events)
+    applied_events = []
+    if user and role == "Student":
+        applied_events = datub.get_user_applied_events(user)
+    return render_template('events.html', events=events, role=role, user=user, applied_events=applied_events)
 
 @app.route('/event/<int:event_id>')
 def event_detail(event_id):
@@ -27,11 +35,6 @@ def event_detail(event_id):
     if not event:#ja nav atrasts pasākums, tad atgriež ziņu, ka nav atrasts pasākums
         return "Tāda pasākuma nav"
     return render_template('event.html', event=event)
-
-    
-@app.route('/booking/success')
-def booking_success():
-    return "👌"
 
 @app.route('/kalendars')
 def kalendars():
@@ -162,13 +165,11 @@ def pieteikties(event_id):
     role = session.get('role')
     if role != 'Student':
         return "Tikai studenti var pieteikties pasākumiem"
-    
     success = datub.apply_for_event(user, event_id)
     if success:
-        return redirect(url_for('booking_success'))
+        return render_template("booking.html", success="Pieteikšanās veiksmīga")
     else:
-        return "Neizdevās pieteikties pasākumam"
-
+        return render_template("booking.html", error="Pieteikšanās neizdevās")
 @app.route('/user_list')
 @app.route('/user_list/<int:event_id>')
 def user_list(event_id=None):
