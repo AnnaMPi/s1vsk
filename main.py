@@ -169,6 +169,16 @@ def pieteikties(event_id):
     else:
         return "Neizdevās pieteikties pasākumam"
 
+@app.route('/user_list')
+@app.route('/user_list/<int:event_id>')
+def user_list(event_id=None):
+    if session.get('role') != 'Admin':
+        return redirect(url_for('index'))
+    
+    participants = datub.get_event_participants(event_id)
+    return render_template('user_list.html', 
+                        participants=participants,
+                        event_id=event_id)
 
 if __name__ == '__main__':
     app.run(debug=True)
