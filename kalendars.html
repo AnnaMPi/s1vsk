@@ -15,7 +15,7 @@
     <table class="calendar-table">
         <thead>
             <tr>
-                <th>P</th>
+                <th>P</th> <!-- nedēļu nosaukumi iedoti listā -->
                 <th>O</th>
                 <th>T</th>
                 <th>C</th>
@@ -31,13 +31,13 @@
                 <td>
                     {% if day != 0 %}
                         {% if day in month_events %}
-                            {% if month_events[day]|length > 1 %}
+                            {% if month_events[day]|length > 1 %} <!-- ja konkrētā dienā ir vairāki pasākums tas ievieto to kalendārā un apzīmē ar emoji --> 
                                 <a href="{{ url_for('day_events', gads=gads, menesis=menesis, day=day) }}" 
                                    class="event-day"
                                    title="{% for event in month_events[day] %}{{ event.title }}{% if not loop.last %}, {% endif %}{% endfor %}">
                                     {{ day }} &#128170;
                                 </a>
-                            {% else %}
+                            {% else %}<!-- ja konkrētā dienā ir 1 pasākums tas ievieto to kalendārā un apzīmē ar citu emoji --> 
                                 <a href="{{ url_for('event_detail', event_id=month_events[day][0].id) }}" 
                                    class="event-day"
                                    title="{{ month_events[day][0].title }}">
