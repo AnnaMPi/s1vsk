@@ -173,5 +173,22 @@ def get_event_participants(event_id=None):
     
     return participants_list
 
+def get_user_applied_events(user_name):
+    conn = sqlite3.connect('datubazes.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT id FROM users WHERE name = ?', (user_name,))
+    user = cursor.fetchone()
+
+    if not user:
+        conn.close()
+        return []
+    user_id = user[0]
+
+    cursor.execute('SELECT event_id FROM pieteikties WHERE user_id = ?', (user_id,))
+    applied_events = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    return applied_events
+
 if __name__ == "__main__":
     create_datubazi()
