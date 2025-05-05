@@ -108,7 +108,7 @@ def apply_for_event(user_name, event_id):
     conn = sqlite3.connect('datubazes.db')
     cursor = conn.cursor()
     
-    # First get the user's ID
+    # Atrod lietotāja ID
     cursor.execute('SELECT id FROM users WHERE name = ?', (user_name,))
     user = cursor.fetchone()
     
@@ -118,13 +118,13 @@ def apply_for_event(user_name, event_id):
     
     user_id = user[0]
     
-    # Check if already registered
+    # Pārbauda, vai lietotājs jau nav reģistrējies
     cursor.execute('SELECT * FROM pieteikties WHERE user_id = ? AND event_id = ?', (user_id, event_id))
     if cursor.fetchone():
         conn.close()
         return False
     
-    # Register for event
+    # Reģistrē lietotāju uz pasākumu
     cursor.execute('INSERT INTO pieteikties (user_id, event_id) VALUES (?, ?)', (user_id, event_id))
     conn.commit()
     conn.close()
@@ -135,7 +135,7 @@ def get_event_participants(event_id=None):
     cursor = conn.cursor()
     
     if event_id:
-        # Get participants for a specific event
+        # Iegūst dalībniekus konkrētam pasākumam
         cursor.execute('''
             SELECT users.name, users.surname, users.class 
             FROM pieteikties 
@@ -143,7 +143,7 @@ def get_event_participants(event_id=None):
             WHERE pieteikties.event_id = ?
         ''', (event_id,))
     else:
-        # Get all participants for all events
+        # Iegūst visus dalībniekus visos pasākumos
         cursor.execute('''
             SELECT users.name, users.surname, users.class, events.title 
             FROM pieteikties 
@@ -154,7 +154,7 @@ def get_event_participants(event_id=None):
     participants = cursor.fetchall()
     conn.close()
     
-    # Convert to list of dictionaries
+    # Pārveido rezultātu par vārdnīcu sarakstu
     participants_list = []
     for participant in participants:
         if event_id:
@@ -174,6 +174,7 @@ def get_event_participants(event_id=None):
     return participants_list
 
 def get_user_applied_events(user_name):
+    #Iegūst pasākumu ID, uz kuriem lietotājs ir reģistrējies.
     conn = sqlite3.connect('datubazes.db')
     cursor = conn.cursor()
 
