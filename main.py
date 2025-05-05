@@ -170,8 +170,8 @@ def pieteikties(event_id):
         return render_template("booking.html", error="Pieteikšanās neizdevās")
 @app.route('/user_list')
 @app.route('/user_list/<int:event_id>')
-def user_list(event_id=None):
-    if session.get('role') != 'Admin':
+def user_list(event_id=None):#iesgūstam pieteikušos skolēnus
+    if session.get('role') != 'Admin':# ja loma nav admins, tad pāriet uz index lapu
         return redirect(url_for('index'))
     
     participants = datub.get_event_participants(event_id)
