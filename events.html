@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}Visi pasākumi{% endblock %}
+
+{% block body %}
+<h2>Visi pasākumi</h2>
+<div class="event-grid">
+    {% for event in events[::] %}
+    <div class="event-card">
+        <img src="{{ event.poster }}" alt="{{ event.title }}">
+        <h3>{{ event.title }}</h3>
+                <button onclick="location.href='{{ url_for("event_detail", event_id=event.id) }}'">Sīkāk info</button>
+        {% if role == "Admin" %}
+            <button onclick="location.href='{{ url_for("user_list", event_id=event.id) }}'">Paskatīt dalībniekus</button> 
+        {% endif %}
+        {% if role == "Student" %}
+            <form action="{{ url_for('pieteikties', event_id=event.id) }}" method="post">
+                <button type="submit" {% if event.id in applied_events%} disabled {% endif %}>Pierakstīties</button>
+            </form>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
