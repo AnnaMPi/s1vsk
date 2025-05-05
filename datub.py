@@ -172,22 +172,24 @@ def get_event_participants(event_id=None):
             })
     
     return participants_list
-
+    
 def get_user_applied_events(user_name):
-    #Iegūst pasākumu ID, uz kuriem lietotājs ir reģistrējies.
     conn = sqlite3.connect('datubazes.db')
     cursor = conn.cursor()
 
     cursor.execute('SELECT id FROM users WHERE name = ?', (user_name,))
     user = cursor.fetchone()
 
-    if not user:
+    if not user:# ja nav atrasts lietotājs, tad atgriež tukšu sarakstu
         conn.close()
         return []
     user_id = user[0]
 
     cursor.execute('SELECT event_id FROM pieteikties WHERE user_id = ?', (user_id,))
-    applied_events = [row[0] for row in cursor.fetchall()]
+    applied_events = [row[0] for row in cursor.fetchall()]# iegūstam visus pasākumus, kuros lietotājs ir pieteicies, paņemot tikai event_id no pieteikties tabulas
+    if not applied_events:# ja nav atrasts neviens pasākums, tad atgriež tukšu sarakstu
+        conn.close()
+        return []
     conn.close()
     return applied_events
 
