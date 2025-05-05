@@ -163,8 +163,9 @@ def pieteikties(event_id):
     if not user:
         return redirect(url_for('login'))
     role = session.get('role')
-    if role != 'Student':
+    if role != 'Student': 
         return "Tikai studenti var pieteikties pasākumiem"
+    # Veic pieteikšanos pasākumam
     success = datub.apply_for_event(user, event_id)
     if success:
         return render_template("booking.html", success="Pieteikšanās veiksmīga")
