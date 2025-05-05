@@ -46,6 +46,7 @@
         {% endif %}
         {% if role == "Student" %}
             <form action="{{ url_for('pieteikties', event_id=event.id) }}" method="post">
+                <!-- Poga ir deaktivizēta, ja lietotājs jau ir pieteicies -->
                 <button type="submit" {% if event.id in applied_events %} disabled {% endif %}>Pierakstīties</button>
             </form>
         {% endif %}
