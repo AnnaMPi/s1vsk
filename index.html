@@ -18,16 +18,12 @@
         {% if events %}
             <h3>Pasākumi, kuros esat pieteicies:</h3>
             <ul class="applied-events">
-                {% set has_applied = false %} <!-- Izveidojam mainīgo kuru padaram par False, lai varētu izdrukāt ja cilvēks nav pieteicies pasākumiem --> 
                 {% for event in events %}
                     {% if event.id in applied_events %}
                         <li>{{ event.title }}</li>
                         {% set has_applied = true %}
                     {% endif %}
                 {% endfor %}
-                {% if not has_applied %}
-                    <p>Jūs neesat pieteicies nevienam pasākumam.</p>
-                {% endif %}
             </ul>
         {% endif %}
     </div>
