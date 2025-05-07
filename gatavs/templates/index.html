@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block title %}Sākumlapa{% endblock %}
+
+{% block body %}
+<h2>Tuvākie pasākumi</h2>
+<div class="ceram">
+    <div class="sveiki">
+        {% if user %}
+            <p>Sveiki, {{ user }}, prieks redzēt jūs!</p>
+        {% else %}
+            <p>Laipni lūgti mājaslapā!</p>
+        {% endif %}
+        {% if role %}
+            <p>Jūsu loma: {{ role }}</p>
+        {% endif %}
+    </div>
+    <div class="pasakumi">
+        {% if events %}
+            <h3>Pasākumi, kuros esat pieteicies:</h3>
+            <ul class="applied-events">
+                {% for event in events %}
+                    {% if event.id in applied_events %}
+                        <li>{{ event.title }}</li>
+                        {% set has_applied = true %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+{% if error %}
+    <h3>{{ error }}</h3>
+{% endif %}
+<div class="event-grid">
+    {% for event in events[:2] %}
+    <div class="event-card">
+        <img src="{{ event.poster }}" alt="{{ event.title }}">
+        <h3>{{ event.title }}</h3>
+                <button onclick="location.href='{{ url_for("event_detail", event_id=event.id) }}'">Sīkāk info</button>
+        {% if role == "Admin" %}
+            <button onclick="location.href='{{ url_for("user_list", event_id=event.id) }}'">Paskatīt dalībniekus</button> 
+        {% endif %}
+        {% if role == "Student" %}
+            <form action="{{ url_for('pieteikties', event_id=event.id) }}" method="post">
+                <!-- Poga ir deaktivizēta, ja lietotājs jau ir pieteicies -->
+                <button type="submit" {% if event.id in applied_events %} disabled {% endif %}>Pierakstīties</button>
+            </form>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

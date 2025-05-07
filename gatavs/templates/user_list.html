@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}Dalībnieku saraksts{% endblock %}
+
+{% block body %}
+<h2>
+    {% if event_id %}
+        Pasākuma dalībnieki
+    {% else %}
+        Visi pasākumu dalībnieki
+    {% endif %}
+</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Vārds</th>
+            <th>Uzvārds</th>
+            <th>Klase</th>
+            {% if not event_id %}
+                <th>Pasākums</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for participant in participants %}
+        <tr>
+            <td>{{ participant.name }}</td>
+            <td>{{ participant.surname }}</td>
+            <td>{{ participant.class }}</td>
+            {% if not event_id %}
+                <td>{{ participant.event }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

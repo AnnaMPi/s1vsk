@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}Reģistrēties{% endblock %}
+{% block body %}
+<form action="/registr" method="post">
+    <div class="box">
+        <label>Ievadi vārdu: </label>
+        <input type="text" placeholder="Name"  name="name">
+        <label>Ievadi uzvārdu: </label>
+        <input type="text" placeholder="Uzvārds" name="uzvards">
+        <label>Ievadi klasi vai skolotājs/-āja: </label>
+        <input type="text" placeholder="Klase vai skolotājs/-āja" name="klase">
+        <label>Ievadi paroli: </label>
+        <input type="password" placeholder="Parole" name="parole">
+        <button type="submit">Iesniegts</button>
+    </div>
+</form>
+{% endblock %}

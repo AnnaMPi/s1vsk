@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}Pieslēgties{% endblock %}
+{% block body %}
+{% if error: %}
+    <h2> {{ error }}</h2>
+{% endif %}
+<form action="/login", method="post">
+    <div class="box">
+        <label>Ievadi vārdu: </label>
+        <input type="text" placeholder="Name"  name="name">
+        <label>Ievadi uzvārdu: </label>
+        <input type="text" placeholder="Uzvārds" name="uzvards">
+        <label>Ievadi paroli: </label>
+        <input type="password" placeholder="Parole" name="parole">
+        <button type="submit">Iesniegts</button>
+    </div>
+</form>
+{% endblock %}
